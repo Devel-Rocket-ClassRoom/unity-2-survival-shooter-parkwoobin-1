@@ -6,8 +6,10 @@ using UnityEngine.AI;
 [RequireComponent(typeof(AudioSource))]
 public class ZombieBase : LivingEntity
 {
-    public enum Status { Idle, Move, Death }
+    public enum Status { Idle, Move, Death }    // 좀비의 현재 상태를 나타내는 열거형입니다. Idle은 대기 상태, Move는 이동 상태, Death는 사망 상태를 의미합니다.
 
+
+    // Attack은 ZombieAttack 컴포넌트에 따로 작성하였습니다.
     [SerializeField] private ZombieData zombieData;
     [SerializeField] private ParticleSystem zombieHitParticle;
     [SerializeField] private AudioClip zombieDamageClip;
@@ -99,7 +101,7 @@ public class ZombieBase : LivingEntity
         ApplyZombieData();
     }
 
-    private void ApplyZombieData()
+    private void ApplyZombieData()  // 좀비의 데이터를 적용하는 메서드입니다. ZombieData에서 설정된 체력, 이동 속도, 공격 피해 등을 좀비에 적용하여 초기화합니다. 이 메서드는 Awake에서 호출되어 좀비가 생성될 때 데이터를 적용하며, 필요에 따라 외부에서 다시 호출하여 좀비의 특성을 변경할 수도 있습니다.
     {
         if (zombieData == null)
         {
@@ -123,7 +125,7 @@ public class ZombieBase : LivingEntity
         return agent != null && agent.enabled && agent.isOnNavMesh;
     }
 
-    private void SetStatus(Status status)
+    private void SetStatus(Status status)   // 좀비의 상태를 변경하는 메서드입니다. Idle, Move, Death 세 가지 상태 중 하나로 전환하며, 상태에 따라 애니메이션 트리거, NavMeshAgent의 작동 여부, 콜라이더 활성화 등을 제어합니다. 사망 상태로 전환될 때는 사망 애니메이션을 재생하고, 일정 시간이 지난 후 좀비가 땅으로 가라앉도록 처리합니다.
     {
         if (currentStatus == status)
             return;
@@ -200,18 +202,18 @@ public class ZombieBase : LivingEntity
             agent.SetDestination(playerTarget.position);
     }
 
-    private void UpdateDie()
+    private void UpdateDie()    // 사망 상태 처리 메소드, 사망 애니메이션 재생 후 좀비가 땅으로 가라 앉아서 방해되지 않게 설정했습니다.
     {
         if (Time.time < deathStartTime + DeathDelay)
             return;
 
-        transform.Translate(Vector3.down * DeathSinkSpeed * Time.deltaTime, Space.World);
+        transform.Translate(Vector3.down * DeathSinkSpeed * Time.deltaTime, Space.World);   // 사망 후 일정 시간이 지나면 좀비가 땅으로 가라앉도록 처리합니다.
 
         if (Time.time >= deathStartTime + DeathDelay + 1f)
             Destroy(gameObject);
     }
 
-    public void StartSinking()
+    public void StartSinking()  // 좀비가 땅에 가라 앉는 시간
     {
         deathStartTime = Time.time - DeathDelay;
     }
@@ -226,7 +228,7 @@ public class ZombieBase : LivingEntity
     }
 
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
-    {
+    {// 좀비가 피해를 입었을 때 처리하는 메서드입니다.
         if (IsDead)
             return;
 
@@ -245,7 +247,7 @@ public class ZombieBase : LivingEntity
             SetStatus(Status.Death);
     }
 
-    private void PlayZombieSound(AudioClip clip)
+    private void PlayZombieSound(AudioClip clip)    // 좀비가 피해를 입거나 사망시 나오는 사운드를 관리하는 메서드입니다.
     {
         if (clip == null)
             return;

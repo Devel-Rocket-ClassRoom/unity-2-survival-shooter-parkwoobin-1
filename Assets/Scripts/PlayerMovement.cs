@@ -81,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        Vector3 mouseWorld = ray.GetPoint(enter);
+        Vector3 mouseWorld = ray.GetPoint(enter);   // 마우스 위치를 월드 자표로 변환하여 lookDirection 계산
         Vector3 look = mouseWorld - transform.position;
         look.y = 0f;
 

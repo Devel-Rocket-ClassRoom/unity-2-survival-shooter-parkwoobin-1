@@ -33,7 +33,7 @@ public class ZombieSpawner : MonoBehaviour
     {
         wave++;
 
-        int count = Mathf.RoundToInt(wave * 1.5f);
+        int count = Mathf.RoundToInt(wave * 1.5f);  // 웨이브가 증가할 수록 좀비의 수가 1.5배씩 증가합니다.
         for (int i = 0; i < count; i++)
         {
             CreateZombie();
@@ -44,7 +44,8 @@ public class ZombieSpawner : MonoBehaviour
 
     }
 
-    private void CreateZombie()
+    private void CreateZombie() // 좀비 생성 메서드입니다. 지정 스폰 포인트 중 하나를 랜덤으로 선택하여 
+    // 좀비 프리팹을 인스턴스화합니다.
     {
         if (spawnPoints == null || spawnPoints.Length == 0)
         {
@@ -79,7 +80,7 @@ public class ZombieSpawner : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"ZombieSpawner: Missing ZombieData for prefab index {zombieTypeIndex}. Using prefab default data.");
+            Debug.LogWarning($"좀비 데이터가 부족합니다.");
         }
         zombies.Add(zombie);
 
@@ -88,7 +89,7 @@ public class ZombieSpawner : MonoBehaviour
         zombie.OnDead.AddListener(() => zombies.Remove(zombie));
 
         if (gameManager != null)
-            zombie.OnDead.AddListener(() => gameManager.AddScore(100));
+            zombie.OnDead.AddListener(() => gameManager.AddScore(100)); // 좀비가 사망하면 점수를 100점 추가합니다.
 
         if (uiManager != null)
             zombie.OnDead.AddListener(() => uiManager.SetWaveInfo(wave));

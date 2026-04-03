@@ -3,7 +3,7 @@ using UnityEngine;
 // ZombieAttack는 좀비가 플레이어에게 공격을 가하는 기능을 담당하는 클래스입니다. 좀비가 플레이어와 충돌할 때 일정 간격으로 피해를 입히도록 구현되어 있습니다.
 public class ZombieAttack : MonoBehaviour
 {
-    [SerializeField] private float attackInterval = 1f;
+    [SerializeField] private float attackInterval = 1f; // 공격 간격을 설정하는 변수입니다. 좀비가 플레이어에게 피해를 입힐 때마다 이 간격만큼의 시간이 지나야 다음 공격이 가능하도록 합니다.
 
     private ZombieBase zombieBase;
     private float attackDamage;
@@ -26,7 +26,7 @@ public class ZombieAttack : MonoBehaviour
     private void OnCollisionEnter(Collision collision) => TryAttack(collision.collider);
     private void OnCollisionStay(Collision collision) => TryAttack(collision.collider);
 
-    private void TryAttack(Collider other)
+    private void TryAttack(Collider other)  // 좀비가 플레이어에게 공격을 시도하는 메서드입니다. 좀비가 사망했거나, 공격 간격이 아직 지나지 않았거나, 플레이어가 사망한 경우에는 공격이 이루어지지 않도록 합니다. 공격이 유효한 경우에는 PlayerHurt 컴포넌트를 찾아 피해를 입히는 로직을 실행합니다.
     {
         if (zombieBase == null || zombieBase.IsDead || Time.time <= lastAttackTime + attackInterval)
             return;
