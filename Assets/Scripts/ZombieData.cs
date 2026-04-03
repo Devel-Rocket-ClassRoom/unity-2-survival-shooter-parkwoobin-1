@@ -1,4 +1,3 @@
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ZombieData", menuName = "Scriptable Objects/ZombieData")]
