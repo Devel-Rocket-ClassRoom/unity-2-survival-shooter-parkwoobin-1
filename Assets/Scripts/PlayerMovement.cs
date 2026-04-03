@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     private Animator playerAnimator;
     private PlayerInput playerInput;
     private Rigidbody playerRigidbody;
+    private Shoot shoot;
+    private PlayerHurt playerHurt;
     private Vector3 lookDirection = Vector3.forward;
     private Vector3 targetLookDirection = Vector3.forward;
 
@@ -18,16 +20,33 @@ public class PlayerMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         playerAnimator = GetComponent<Animator>();
         playerRigidbody = GetComponent<Rigidbody>();
+        shoot = GetComponent<Shoot>();
+        playerHurt = GetComponent<PlayerHurt>();
+
+        if (playerAnimator == null)
+            Debug.LogError("Animator not found on Player.", this);
+        if (playerHurt == null)
+            Debug.LogWarning("PlayerHurt not found on Player. Will continue with movement only.", this);
     }
 
     private void Update()
     {
-        playerAnimator.SetFloat(HashMove, playerInput.Move.magnitude);
+        if (playerHurt != null && playerHurt.IsDead)
+            return;
+
+        if (playerAnimator != null)
+            playerAnimator.SetFloat(HashMove, playerInput.Move.magnitude);
         UpdateLookRotation();
     }
 
     private void FixedUpdate()
     {
+        if (playerHurt != null && playerHurt.IsDead)
+            return;
+
+        if (playerRigidbody == null)
+            return;
+
         float t = 1f - Mathf.Exp(-aimSmooth * Time.fixedDeltaTime);
         lookDirection = Vector3.Slerp(lookDirection, targetLookDirection, t);
 
@@ -47,7 +66,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateLookRotation()   // 마우스 방향으로 캐릭터 회전
     {
+        if (playerInput == null)
+            return;
+
         UnityEngine.Camera cam = UnityEngine.Camera.main;
+        if (cam == null)    // 메인 카메라가 없는 경우 회전 처리하지 않음
+            return;
 
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         Plane groundPlane = new Plane(Vector3.up, transform.position);

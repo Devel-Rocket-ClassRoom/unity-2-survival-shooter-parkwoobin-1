@@ -8,15 +8,21 @@ public class Shoot : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private float fireDistance = 30f;
     [SerializeField] private float lineToggleInterval = 0.06f;
+    [SerializeField] private LayerMask hitMask = ~0;
 
 
 
     private bool lineVisible;
     private float nextToggleTime;
+    private Vector3 currentLineEnd;
+    private AudioSource gunAudioSource;
 
     private void Awake()
     {
-        firePoint ??= transform;
+        firePoint ??= transform;    // firePoint이 지정되지 않은 경우 현재 오브젝트의 위치와 회전을 사용
+        gunAudioSource = GetComponent<AudioSource>();
+        if (gunAudioSource == null)
+            gunAudioSource = gameObject.AddComponent<AudioSource>();
 
         gunParticles = GetComponentInChildren<ParticleSystem>(true);
         shotLineRenderer = GetComponentInChildren<LineRenderer>(true);
@@ -38,6 +44,7 @@ public class Shoot : MonoBehaviour
         shotLineRenderer.useWorldSpace = true;
         shotLineRenderer.enabled = false;
         lineVisible = false;
+        currentLineEnd = firePoint.position + firePoint.forward * fireDistance;
 
         if (gunParticles != null)
         {
@@ -49,6 +56,14 @@ public class Shoot : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale == 0f)
+        {
+            if (lineVisible)
+                EndFire();
+
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             BeginFire();
@@ -111,6 +126,7 @@ public class Shoot : MonoBehaviour
 
     private void ShowLine() // 총구에서 일정 거리까지 선을 표시
     {
+        FireRaycast();
         UpdateLinePositions();
         shotLineRenderer.enabled = true;
         PlayGunSound();
@@ -139,20 +155,50 @@ public class Shoot : MonoBehaviour
     private void UpdateLinePositions()
     {
         Vector3 start = firePoint.position;
-        Vector3 end = start + firePoint.forward * fireDistance;
+        Vector3 end = currentLineEnd;
         shotLineRenderer.SetPosition(0, start);
         shotLineRenderer.SetPosition(1, end);
     }
 
-    private void PlayGunSound()
+    private void FireRaycast()
     {
-        if (gunData == null || gunData.shotClip == null)
+        Vector3 origin = firePoint.position;
+        Vector3 direction = firePoint.forward;
+
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, fireDistance, hitMask, QueryTriggerInteraction.Collide))
         {
-            Debug.LogWarning("GunData 또는 GunData.shotClip이 비어 있습니다.", this);
+            currentLineEnd = hit.point;
+
+            // 데미지 처리
+            LivingEntity target = hit.collider.GetComponentInParent<LivingEntity>();
+            if (target != null)
+            {
+                // 데미지 적용
+                target.OnDamage(gunData.damage, hit.point, -direction);
+
+                Debug.Log($"Hit {hit.collider.name} with damage {gunData.damage}");
+            }
+
+            HitBox hitTarget = hit.collider.GetComponentInParent<HitBox>();
+            if (hitTarget != null)
+            {
+                hitTarget.Colliders.Add(hit.collider);
+            }
+        }
+        else
+        {
+            currentLineEnd = origin + direction * fireDistance;
+        }
+    }
+
+    private void PlayGunSound() // 총소리 재생
+    {
+        if (gunData == null || gunData.shotClip == null || gunAudioSource == null)
+        {
             return;
         }
 
-        Vector3 soundPosition = firePoint != null ? firePoint.position : transform.position;
-        AudioSource.PlayClipAtPoint(gunData.shotClip, soundPosition);
+        float effectVolume = AudioSetting.Current != null ? AudioSetting.Current.EffectVolume : 1f;
+        gunAudioSource.PlayOneShot(gunData.shotClip, effectVolume);
     }
 }
