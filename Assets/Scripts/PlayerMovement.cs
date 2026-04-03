@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// PlayerMovement 클래스는 플레이어의 이동과 회전을 담당하는 클래스입니다. WASD 키로 이동 방향을 입력받아 Rigidbody를 통해 이동하며, 마우스 위치를 기준으로 캐릭터가 바라보는 방향을 부드럽게 회전시킵니다. 또한, 플레이어가 피해를 입어 사망한 경우에는 이동과 회전을 멈추도록 처리합니다.
 public class PlayerMovement : MonoBehaviour
 {
     public static readonly int HashMove = Animator.StringToHash("Move");

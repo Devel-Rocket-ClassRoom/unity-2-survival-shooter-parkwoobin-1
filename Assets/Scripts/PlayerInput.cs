@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// PlayerInput 클래스는 플레이어의 입력을 처리하는 역할을 합니다. WASD 키로 이동 방향을, 마우스 움직임으로 시점 조절을, 마우스 클릭으로 공격 여부를 감지하여 각각 Move, MouseX, MouseY, Fire 프로퍼티에 저장합니다. 이 클래스는 다른 스크립트에서 플레이어의 입력 상태를 쉽게 참조할 수 있도록 설계되었습니다.
 public class PlayerInput : MonoBehaviour
 {
     public static readonly string HorizontalAxis = "Horizontal";

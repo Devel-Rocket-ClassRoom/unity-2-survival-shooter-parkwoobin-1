@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Shoot 클래스는 플레이어가 총을 발사하는 기능을 담당합니다. 마우스 클릭으로 총을 발사하며, 레이캐스트를 사용하여 적에게 피해를 입히고, 총구에서 선을 표시하는 효과를 구현합니다. 또한, 총소리를 재생하고, 총알 이펙트를 발생시키는 기능도 포함되어 있습니다.
 public class Shoot : MonoBehaviour
 {
     [SerializeField] private GunData gunData;

@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+
+// ZombieBase는 좀비의 기본적인 행동과 상태를 관리하는 클래스입니다. 좀비의 체력, 이동, 사망 처리 등을 담당하며, ZombieAttack과 상호작용하여 플레이어에게 피해를 입히는 역할도 합니다.
 [RequireComponent(typeof(AudioSource))]
 public class ZombieBase : LivingEntity
 {

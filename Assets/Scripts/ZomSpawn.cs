@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+// ZombieSpawner는 좀비를 주기적으로 생성하는 클래스입니다. 게임의 난이도에 따라 웨이브가 증가하며, 각 웨이브마다 좀비의 수가 늘어납니다. 또한, 좀비가 사망할 때 점수를 추가하고, UI에 웨이브 정보를 업데이트하는 기능도 포함되어 있습니다.
 public class ZombieSpawner : MonoBehaviour
 {
     public GameManager gameManager;

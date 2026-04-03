@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
+
+// PlayerHurt 클래스는 플레이어가 피해를 입었을 때의 행동을 정의하는 클래스입니다. LivingEntity를 상속하여 체력 관리와 사망 처리를 구현하며, 피해를 입을 때 화면에 피격 효과를 표시하고, 사망 시 애니메이션과 게임 오버 UI를 트리거하는 기능도 포함되어 있습니다.
 public class PlayerHurt : LivingEntity
 {
     private static readonly int HashDeath = Animator.StringToHash("Death");

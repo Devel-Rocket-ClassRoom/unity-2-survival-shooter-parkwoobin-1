@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// GameManager는 게임의 전반적인 상태를 관리하는 클래스입니다. 점수 관리, 게임 오버 처리, UI 업데이트 등의 기능을 담당합니다. 좀비가 사망할 때 점수를 추가하고, 플레이어가 사망하면 게임 오버 UI를 활성화하는 등의 역할을 수행합니다.
 public class GameManager : MonoBehaviour
 {
     public UIManager uiManager;

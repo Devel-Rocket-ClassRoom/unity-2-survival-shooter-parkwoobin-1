@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
+// UIManager는 게임의 UI 요소들을 관리하는 클래스입니다. 점수, 웨이브 정보, 게임 오버 UI 등을 제어합니다. 또한, ESC 키 입력을 감지하여 일시정지 메뉴를 토글하는 기능도 포함되어 있습니다.
 public class UIManager : MonoBehaviour
 {
     public Text scoreText;

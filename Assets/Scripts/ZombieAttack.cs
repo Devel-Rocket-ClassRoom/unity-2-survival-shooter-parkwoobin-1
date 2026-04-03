@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// ZombieAttack는 좀비가 플레이어에게 공격을 가하는 기능을 담당하는 클래스입니다. 좀비가 플레이어와 충돌할 때 일정 간격으로 피해를 입히도록 구현되어 있습니다.
 public class ZombieAttack : MonoBehaviour
 {
     [SerializeField] private float attackInterval = 1f;
