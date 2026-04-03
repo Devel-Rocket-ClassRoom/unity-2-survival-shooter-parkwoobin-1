@@ -290,4 +290,3 @@
 
 - 클래스명과 파일명이 다른 경우
 - 파일 [ZomSpawn.cs](ZomSpawn.cs) 안 클래스명은 ZombieSpawner 입니다.
-- 현재 인터페이스 [IZombieStats.cs](IZombieStats.cs) 는 선언만 있고 구현체가 없습니다.
