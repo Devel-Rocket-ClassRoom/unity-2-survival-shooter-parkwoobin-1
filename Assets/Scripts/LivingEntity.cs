@@ -18,24 +18,13 @@ public class LivingEntity : MonoBehaviour
     }
 
 
-    public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
+    public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal) // 피해 처리 메서드입니다. 체력을 감소시키고, 체력이 0 이하가 되면 사망 처리합니다.
     {
         Health -= damage;
         if (Health <= 0)
         {
             Health = 0;
             Die();
-        }
-    }
-
-    public virtual void OnHeal(float add)
-    {
-        if (IsDead) return;
-
-        Health += add;
-        if (Health > startingHealth)
-        {
-            Health = startingHealth;
         }
     }
 
