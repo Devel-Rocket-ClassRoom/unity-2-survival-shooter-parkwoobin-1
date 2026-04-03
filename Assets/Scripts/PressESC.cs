@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 // PressESC 클래스는 ESC 키 입력을 감지하여 일시정지 메뉴를 토글하는 기능을 담당합니다. 메뉴 패널, 오디오 설정, 슬라이더, 버튼 등을 관리하며, 게임이 일시정지 상태일 때 시간 스케일을 조절하여 게임을 멈추거나 재개하는 역할도 합니다.
 public class PressESC : MonoBehaviour
@@ -132,14 +133,11 @@ public class PressESC : MonoBehaviour
     {
         Time.timeScale = 1f;
 
-        if (Application.isEditor)
-        {
-            UnityEditor.EditorApplication.isPlaying = false;
-        }
-        else
-        {
-            Application.Quit();
-        }
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
     }
 
     private void ResolveMenuPanel() // 메뉴 패널을 찾는 메서드입니다. 여러 이름으로 검색하여 유연성을 높였습니다.
